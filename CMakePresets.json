@@ -1,0 +1,56 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 23,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "default",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build"
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
+      "name": "lib-debug",
+      "displayName": "Library Debug Build",
+      "description": "Build the library in debug mode",
+      "inherits": [
+        "default",
+        "debug"
+      ]
+    },
+    {
+      "name": "lib-release",
+      "displayName": "Library Release Build",
+      "description": "Build the library in release mode",
+      "inherits": [
+        "default",
+        "release"
+      ]
+    },
+    {
+      "name": "example-basic",
+      "displayName": "Basic example",
+      "description": "Build the basic example",
+      "inherits": [
+        "default",
+        "debug"
+      ]
+    }
+  ]
+}
