@@ -20,7 +20,7 @@ int main()
   std::string player = players[0];
 
   // Toogle play/pause
-  mpris_controller.PlayPause("firefox.instance_1_37");
+  mpris_controller.PlayPause(player);
 
   // Get metadata and print it
   std::cout << "\nMetadata:" << std::endl;
