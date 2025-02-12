@@ -1,6 +1,6 @@
-message(STATUS "→ Building basic example")
+message(STATUS "→ Building example")
 
-# Add basic example executable
-add_executable(basic)
-target_sources(basic PRIVATE main.cpp)
-target_link_libraries(basic PRIVATE mprisctl)
+# Add example executable
+add_executable(example)
+target_sources(example PRIVATE main.cpp)
+target_link_libraries(example PRIVATE mprisctl)

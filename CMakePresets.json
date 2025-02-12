@@ -44,9 +44,9 @@
       ]
     },
     {
-      "name": "example-basic",
-      "displayName": "Basic example",
-      "description": "Build the basic example",
+      "name": "example",
+      "displayName": "Example",
+      "description": "Build the example executable",
       "inherits": [
         "default",
         "debug"
