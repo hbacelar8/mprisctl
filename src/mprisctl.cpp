@@ -40,6 +40,85 @@ MPRISController::~MPRISController()
     dbus_connection_unref(dbus_connection);
 }
 
+std::vector<std::string> MPRISController::GetAvailablePlayers()
+{
+  std::vector<std::string> players;
+
+  if (!dbus_connection)
+  {
+    std::cerr << "D-Bus connection is not open" << std::endl;
+
+    return players;
+  }
+
+  DBusError error;
+  dbus_error_init(&error);
+
+  // Create a new method call message
+  DBusMessage *msg = dbus_message_new_method_call("org.freedesktop.DBus",
+                                                  "/org/freedesktop/DBus",
+                                                  "org.freedesktop.DBus",
+                                                  "ListNames");
+
+  if (!msg)
+  {
+    std::cerr << "Failed to create D-Bus message" << std::endl;
+
+    return players;
+  }
+
+  // Send message and wait for a reply
+  DBusMessage *reply = dbus_connection_send_with_reply_and_block(dbus_connection, msg, -1, &error);
+
+  if (dbus_error_is_set(&error))
+  {
+    std::cerr << "Failed to get available players: " << error.message << std::endl;
+
+    // Clean up
+    dbus_error_free(&error);
+  }
+  else
+  {
+    DBusMessageIter iter;
+
+    if (dbus_message_iter_init(reply, &iter))
+    {
+      DBusMessageIter arrayIter;
+      dbus_message_iter_recurse(&iter, &arrayIter);
+
+      while (dbus_message_iter_get_arg_type(&arrayIter) != DBUS_TYPE_INVALID)
+      {
+        const char *serviceName;
+        dbus_message_iter_get_basic(&arrayIter, &serviceName);
+
+        // Check if the service name matches the MPRIS naming convention
+
+        if (std::string(serviceName).find("org.mpris.MediaPlayer2.") == 0)
+        {
+          std::string playerName = std::string(serviceName);
+          playerName.erase(0, strlen("org.mpris.MediaPlayer2."));
+          players.push_back(playerName);
+        }
+
+        dbus_message_iter_next(&arrayIter);
+      }
+    }
+    else
+    {
+      std::cerr << "Failed to parse metada message" << std::endl;
+    }
+  }
+
+  // Clean up
+  if (msg)
+    dbus_message_unref(msg);
+
+  if (reply)
+    dbus_message_unref(reply);
+
+  return players;
+}
+
 bool MPRISController::PlayPause(const std::string &playerName)
 {
   return SendCommand(playerName, "PlayPause");

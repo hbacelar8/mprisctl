@@ -47,6 +47,14 @@ public:
   ~MPRISController();
 
   /**
+   * @brief Get a vector with all available players
+   *
+   * @return std::vector<std::string> Vector of available players
+   * @note An empty vector is returned if failed
+   */
+  std::vector<std::string> GetAvailablePlayers();
+
+  /**
    * @brief Toggle Play/Pause on the specified player
    *
    * @param playerName Name of the player
